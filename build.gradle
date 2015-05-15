@@ -1,0 +1,108 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+import groovy.json.*
+
+configurations {
+    compile
+    deployJars
+}
+
+apply plugin: "forge"
+apply plugin: "maven"
+
+group = "net.doubledoordev.insidertrading"
+version = "0.9.0"
+
+targetCompatibility = 1.7
+sourceCompatibility = 1.7
+
+archivesBaseName = 'InsiderTrading'
+def githuborg = 'DoubleDoorDevelopment'
+def description = 'Easy villager customizing!'
+
+minecraft {
+    version = "1.7.10-10.13.1.1224"
+    runDir = "jars"
+}
+
+repositories {
+    maven {
+         name "DDD repo"
+         url "http://doubledoordev.net/maven/"
+     }
+}
+
+dependencies {
+    compile "net.doubledoordev.d3core:D3Core:" + project.minecraft.version + "-+:dev"
+}
+
+if (System.getenv().BUILD_NUMBER != null) version += "." + System.getenv().BUILD_NUMBER
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version, 'modid':project.archivesBaseName, 'githuborg':githuborg, 'description':description
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '**/*.info'
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from "LICENSE.txt"
+    from sourceSets.main.allSource
+    classifier = 'src'
+    appendix = project.minecraft.version
+	
+	manifest {
+        attributes 'FMLCorePluginContainsFMLMod': 'true'
+        attributes 'FMLCorePlugin': 'net.doubledoordev.insidertrading.asm.AsmCore'
+    }
+}
+
+task deobfJar(type: Jar) {
+    from "LICENSE.txt"
+    from sourceSets.main.output
+    from (sourceSets.main.allSource.srcDirs) {
+        include '**/*.java'
+    }
+	classifier = 'dev'
+    appendix = project.minecraft.version
+	
+	manifest {
+        attributes 'FMLCorePluginContainsFMLMod': 'true'
+        attributes 'FMLCorePlugin': 'net.doubledoordev.insidertrading.asm.AsmCore'
+    }
+}
+
+jar {
+    from "LICENSE.txt"
+    appendix = project.minecraft.version
+	
+	manifest {
+        attributes 'FMLCorePluginContainsFMLMod': 'true'
+        attributes 'FMLCorePlugin': 'net.doubledoordev.insidertrading.asm.AsmCore'
+    }
+}
+
+artifacts {
+	archives jar
+    archives sourcesJar
+    archives deobfJar
+}
