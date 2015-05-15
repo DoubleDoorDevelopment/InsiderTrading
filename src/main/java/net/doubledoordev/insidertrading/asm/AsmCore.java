@@ -1,6 +1,5 @@
 package net.doubledoordev.insidertrading.asm;
 
-import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
@@ -8,7 +7,7 @@ import java.util.Map;
 /**
  * @author Dries007
  */
-public class AsmCore extends DummyModContainer implements IFMLLoadingPlugin
+public class AsmCore implements IFMLLoadingPlugin
 {
     @Override
     public String[] getASMTransformerClass()
@@ -19,7 +18,7 @@ public class AsmCore extends DummyModContainer implements IFMLLoadingPlugin
     @Override
     public String getModContainerClass()
     {
-        return "net.doubledoordev.insidertrading.asm.FakeModContainer";
+        return null;
     }
 
     @Override
