@@ -1,0 +1,59 @@
+{
+  "-1": {
+    "clearFirst": true,
+    "remove": [],
+    "add": [
+      {
+        "buying1": {
+          "item": "minecraft:cobblestone",
+          "meta": 0,
+          "maxStacksize": 64,
+          "minStacksize": 1,
+          "anyTag": false
+        },
+        "selling": {
+          "item": "minecraft:diamond_sword",
+          "meta": 0,
+          "maxStacksize": 1,
+          "minStacksize": 1,
+          "anyTag": false
+        },
+        "chance": 1.0
+      },
+      {
+        "buying1": {
+          "item": "minecraft:gravel",
+          "meta": 0,
+          "maxStacksize": 64,
+          "minStacksize": 1,
+          "anyTag": false
+        },
+        "selling": {
+          "item": "minecraft:diamond_sword",
+          "meta": 0,
+          "maxStacksize": 1,
+          "minStacksize": 1,
+          "anyTag": false
+        },
+        "chance": 0.50595236
+      },
+      {
+        "buying1": {
+          "item": "minecraft:sandstone",
+          "meta": 32767,
+          "maxStacksize": 64,
+          "minStacksize": 1,
+          "anyTag": false
+        },
+        "selling": {
+          "item": "minecraft:shears",
+          "meta": 0,
+          "maxStacksize": 1,
+          "minStacksize": 1,
+          "anyTag": false
+        },
+        "chance": 0.5
+      }
+    ]
+  }
+}

@@ -1,9 +1,12 @@
 package net.doubledoordev.insidertrading.asm;
 
+import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import cpw.mods.fml.common.asm.transformers.deobf.FMLRemappingAdapter;
 import net.doubledoordev.insidertrading.util.Constants;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.Sys;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -33,14 +36,9 @@ public class ClassTransformer implements IClassTransformer
 
             for (MethodNode methodNode : classNode.methods)
             {
-                if (methodNode.name.equals("func_70950_c"))
-                {
-                    addHook(methodNode, false);
-                }
-                if (methodNode.name.equals("addDefaultEquipmentAndRecipies"))
-                {
-                    addHook(methodNode, true);
-                }
+                String name = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(classNode.name, methodNode.name, methodNode.desc);
+                if (name.equals("func_70950_c")) addHook(methodNode, false);
+                else if (name.equals("addDefaultEquipmentAndRecipies")) addHook(methodNode, true);
             }
 
             ClassWriter cw = new ClassWriter(COMPUTE_MAXS);

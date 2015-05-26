@@ -66,7 +66,7 @@ public class InsiderTrading implements ID3Mod
         {
             if (i < 0)
             {
-                RuntimeException e = new RuntimeException("Some stupid mod decided to register a villager with a negative ID. InsiderTrading won't be able to work in the environment.");
+                RuntimeException e = new RuntimeException("Some mod decided to register a villager with a negative ID. InsiderTrading won't be able to work in this environment.");
                 e.setStackTrace(new StackTraceElement[0]);
                 throw e;
             }
