@@ -7,6 +7,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -63,18 +64,17 @@ public class ITCommand extends CommandBase
         else if (args.length == 2)
         {
             Collection<Integer> forgeIds = VillagerRegistry.getRegisteredVillagers();
-            String[] ids = new String[forgeIds.size() + 6];
-            int i = 0;
-            ids[i++] = "0";
-            ids[i++] = "1";
-            ids[i++] = "2";
-            ids[i++] = "3";
-            ids[i++] = "4";
+            ArrayList<String> ids = new ArrayList<>(forgeIds.size() + 6);
+            ids.add("0");
+            ids.add("1");
+            ids.add("2");
+            ids.add("3");
+            ids.add("4");
             for (Integer id : forgeIds)
             {
-                ids[i++] = id.toString();
+                ids.add(id.toString());
             }
-            return getListOfStringsMatchingLastWord(args, ids);
+            return getListOfStringsMatchingLastWord(args, ids.toArray(new String[ids.size()]));
         }
         return null;
     }

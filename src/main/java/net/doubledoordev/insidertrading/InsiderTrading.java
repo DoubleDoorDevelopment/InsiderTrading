@@ -2,6 +2,7 @@ package net.doubledoordev.insidertrading;
 
 import com.google.common.reflect.TypeToken;
 import cpw.mods.fml.client.config.IConfigElement;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -9,11 +10,13 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.doubledoordev.d3core.util.ID3Mod;
+import net.doubledoordev.insidertrading.client.DebugScreen;
 import net.doubledoordev.insidertrading.gui.ITGuiHandler;
 import net.doubledoordev.insidertrading.util.Constants;
 import net.doubledoordev.insidertrading.util.ITCommand;
 import net.doubledoordev.insidertrading.util.TradeManipulation;
 import net.minecraft.village.MerchantRecipeList;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.commons.io.FileUtils;
@@ -57,6 +60,8 @@ public class InsiderTrading implements ID3Mod
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ITGuiHandler());
 
         syncConfig();
+
+        if (event.getSide().isClient()) MinecraftForge.EVENT_BUS.register(new DebugScreen());
     }
 
     @Mod.EventHandler
