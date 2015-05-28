@@ -15,6 +15,7 @@ import net.doubledoordev.insidertrading.gui.ITGuiHandler;
 import net.doubledoordev.insidertrading.util.Constants;
 import net.doubledoordev.insidertrading.util.ITCommand;
 import net.doubledoordev.insidertrading.util.TradeManipulation;
+import net.doubledoordev.insidertrading.util.TradeWrapper;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigElement;
@@ -24,10 +25,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static net.doubledoordev.insidertrading.util.Constants.MODID;
 
@@ -51,10 +49,24 @@ public class InsiderTrading implements ID3Mod
         jsonFile = new File(event.getModConfigurationDirectory(), MODID.concat(".json"));
         if (jsonFile.exists())
         {
-            Type type = new TypeToken<Map<String, TradeManipulation>>()
+            List<TradeWrapper> errors = new ArrayList<>();
+            tradeManipulationMap.putAll(Constants.GSON.<Map<String, TradeManipulation>>fromJson(FileUtils.readFileToString(jsonFile, "utf-8"), new TypeToken<Map<String, TradeManipulation>>() {}.getType()));
+            for (TradeManipulation manipulation : tradeManipulationMap.values())
             {
-            }.getType();
-            tradeManipulationMap.putAll(Constants.GSON.<Map<String, TradeManipulation>>fromJson(FileUtils.readFileToString(jsonFile, "utf-8"), type));
+                for (TradeWrapper wrapper : manipulation.add)
+                {
+                    if (!wrapper.isValid()) errors.add(wrapper);
+                }
+            }
+
+            if (!errors.isEmpty())
+            {
+                event.getModLog().fatal(Constants.GSON.toJson(errors));
+
+                RuntimeException e = new RuntimeException("You have some misconfiguration in your recipes. See above in the logfile.");
+                e.setStackTrace(new StackTraceElement[0]);
+                throw e;
+            }
         }
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ITGuiHandler());

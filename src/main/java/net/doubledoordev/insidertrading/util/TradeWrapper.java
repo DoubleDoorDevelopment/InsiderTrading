@@ -24,4 +24,9 @@ public class TradeWrapper implements IMatcher<MerchantRecipe>
     {
         return buying1.matches(obj.getItemToBuy()) && ((buying2 == null && !obj.hasSecondItemToBuy()) || buying2.matches(obj.getSecondItemToBuy())) && (selling.matches(obj.getItemToSell()));
     }
+
+    public boolean isValid()
+    {
+        return buying1 != null && selling != null;
+    }
 }

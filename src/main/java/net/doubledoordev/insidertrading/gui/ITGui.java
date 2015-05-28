@@ -9,12 +9,14 @@ import net.doubledoordev.insidertrading.InsiderTrading;
 import net.doubledoordev.insidertrading.util.ItemStackWrapper;
 import net.doubledoordev.insidertrading.util.TradeManipulation;
 import net.doubledoordev.insidertrading.util.TradeWrapper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
@@ -140,12 +142,19 @@ public class ITGui extends GuiContainer
                 trade.buying2 = getItemStackWrapperFromSlot(1);
                 trade.selling = getItemStackWrapperFromSlot(2);
 
-                TradeManipulation manipulation = InsiderTrading.instance.tradeManipulationMap.get(Integer.toString(profession));
-                if (manipulation == null) InsiderTrading.instance.tradeManipulationMap.put(Integer.toString(profession), manipulation = new TradeManipulation());
+                if (trade.isValid())
+                {
+                    TradeManipulation manipulation = InsiderTrading.instance.tradeManipulationMap.get(Integer.toString(profession));
+                    if (manipulation == null) InsiderTrading.instance.tradeManipulationMap.put(Integer.toString(profession), manipulation = new TradeManipulation());
 
-                (add ? manipulation.add : manipulation.remove).add(trade);
+                    (add ? manipulation.add : manipulation.remove).add(trade);
 
-                InsiderTrading.instance.saveDB();
+                    InsiderTrading.instance.saveDB();
+                }
+                else
+                {
+                    Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("Invalid recipe."));
+                }
             }
             catch (Exception e)
             {
