@@ -115,6 +115,7 @@ public class ITGui extends GuiContainer
 
         for (int i = 0; i < checkBoxes.length; i++)
         {
+            checkBoxes[i].visible = !add;
             checkBoxHoverChecker[i] = new HoverChecker(checkBoxes[i], 800);
         }
 
@@ -123,7 +124,7 @@ public class ITGui extends GuiContainer
             GuiTextField f = fields[i];
             f.setText("1");
             f.setMaxStringLength(2);
-            f.setVisible(checkBoxes[i].visible = container.slots[i / 2].getHasStack());
+            f.setVisible(checkBoxes[i].visible = container.slots[i / 2].getHasStack() && !add);
             fieldsHoverChecker[i] = new HoverChecker(f.yPosition, f.yPosition + f.height, f.xPosition, f.xPosition + f.width, 800);
         }
     }
@@ -225,11 +226,13 @@ public class ITGui extends GuiContainer
         super.handleMouseClick(p_146984_1_, p_146984_2_, p_146984_3_, p_146984_4_);
         for (int i = 0; i < fields.length; i++)
         {
-            fields[i].setVisible(checkBoxes[i].visible = container.slots[i / 2].getHasStack());
+            boolean hasStack = container.slots[i / 2].getHasStack();
+            fields[i].setVisible(hasStack);
+            checkBoxes[i].visible = hasStack && (!add || i >= 4);
         }
         for (int i = 0; i < 3; i++)
         {
-            checkBoxes[6 + i].visible = !container.slots[i].getHasStack();
+            checkBoxes[6 + i].visible = !container.slots[i].getHasStack() && !add;
         }
     }
 
@@ -241,8 +244,8 @@ public class ITGui extends GuiContainer
         this.fontRendererObj.drawString(helpText, this.xSize / 2 - this.fontRendererObj.getStringWidth(helpText) / 2, 14, 4210752);
         this.fontRendererObj.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 
-        this.fontRendererObj.drawString("Meta", 6, 78, 4210752);
-        this.fontRendererObj.drawString("NBT", 6, 90, 4210752);
+        this.fontRendererObj.drawString("Meta", add ? 90 : 6, 78, 4210752);
+        this.fontRendererObj.drawString("NBT", add ? 90 : 6, 90, 4210752);
 
         this.fontRendererObj.drawString(MAX, 30 - this.fontRendererObj.getStringWidth(MAX), 25, 4210752);
         this.fontRendererObj.drawString(MIN, 30 - this.fontRendererObj.getStringWidth(MIN), 40, 4210752);

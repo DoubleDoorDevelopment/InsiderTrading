@@ -25,7 +25,7 @@ public class ITCommand extends CommandBase
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_)
     {
-        return "/insidertrading <add|remove> [professionID, -1 for all]";
+        return "/insidertrading <add|remove> [professionID, none for all types]";
     }
 
     @Override
@@ -65,7 +65,6 @@ public class ITCommand extends CommandBase
         {
             Collection<Integer> forgeIds = VillagerRegistry.getRegisteredVillagers();
             ArrayList<String> ids = new ArrayList<>(forgeIds.size() + 6);
-            ids.add("-1");
             ids.add("0");
             ids.add("1");
             ids.add("2");
