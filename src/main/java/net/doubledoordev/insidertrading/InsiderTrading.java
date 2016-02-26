@@ -2,7 +2,6 @@ package net.doubledoordev.insidertrading;
 
 import com.google.common.reflect.TypeToken;
 import cpw.mods.fml.client.config.IConfigElement;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -10,6 +9,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.doubledoordev.d3core.util.ID3Mod;
+import net.doubledoordev.insidertrading.asm.ClassTransformer;
 import net.doubledoordev.insidertrading.client.DebugScreen;
 import net.doubledoordev.insidertrading.gui.ITGuiHandler;
 import net.doubledoordev.insidertrading.util.Constants;
@@ -21,10 +21,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.*;
 
 import static net.doubledoordev.insidertrading.util.Constants.MODID;
@@ -41,10 +41,15 @@ public class InsiderTrading implements ID3Mod
 
     @Mod.Instance(MODID)
     public static InsiderTrading instance;
+    public Logger logger;
 
     @Mod.EventHandler
     public void init(FMLPreInitializationEvent event) throws IOException
     {
+        logger = event.getModLog();
+
+        if (ClassTransformer.done < ClassTransformer.DONE) throw new RuntimeException("ASM handler didn't work...");
+
         configuration = new Configuration(event.getSuggestedConfigurationFile());
         jsonFile = new File(event.getModConfigurationDirectory(), MODID.concat(".json"));
         if (jsonFile.exists())
@@ -68,6 +73,7 @@ public class InsiderTrading implements ID3Mod
                 throw e;
             }
         }
+        else logger.info("No config file, oh well.");
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ITGuiHandler());
 

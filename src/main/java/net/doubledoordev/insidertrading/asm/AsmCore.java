@@ -12,7 +12,7 @@ public class AsmCore implements IFMLLoadingPlugin
     @Override
     public String[] getASMTransformerClass()
     {
-        return new String[]{"net.doubledoordev.insidertrading.asm.ClassTransformer"};
+        return new String[]{ClassTransformer.class.getName()};
     }
 
     @Override

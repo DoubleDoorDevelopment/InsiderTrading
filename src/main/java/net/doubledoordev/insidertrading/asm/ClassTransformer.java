@@ -1,12 +1,11 @@
 package net.doubledoordev.insidertrading.asm;
 
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
-import cpw.mods.fml.common.asm.transformers.deobf.FMLRemappingAdapter;
 import net.doubledoordev.insidertrading.util.Constants;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.Sys;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -24,12 +23,15 @@ import static org.objectweb.asm.Opcodes.ASM5;
 public class ClassTransformer implements IClassTransformer
 {
     private static final Logger logger = LogManager.getLogger(Constants.MODID_ASM);
+    public static final int DONE = 1;
+    public static int done;
 
     @Override
     public byte[] transform(String s, String s1, byte[] bytes)
     {
         if (s1.equals("net.minecraft.entity.passive.EntityVillager"))
         {
+            logger.info("Found EntityVillager class");
             ClassReader cr = new ClassReader(bytes);
             ClassNode classNode = new ClassNode(ASM5);
             cr.accept(classNode, EXPAND_FRAMES);
@@ -50,7 +52,7 @@ public class ClassTransformer implements IClassTransformer
 
     private void addHook(MethodNode methodNode, boolean deob)
     {
-        logger.info("Found methods, looking for insertion point...");
+        logger.info("Found method ({}), looking for insertion point...", deob ? "deobf" : "obf");
 
         ListIterator<AbstractInsnNode> i = methodNode.instructions.iterator();
         while (i.hasNext())
@@ -61,6 +63,9 @@ public class ClassTransformer implements IClassTransformer
                 MethodInsnNode node = ((MethodInsnNode) abstractInsnNodenode);
                 if (node.name.equals("shuffle") && node.owner.equals("java/util/Collections") && node.desc.equals("(Ljava/util/List;)V"))
                 {
+                    logger.info("Found shuffle method!");
+                    done ++;
+
                     InsnList list = new InsnList();
 
                     list.add(new VarInsnNode(Opcodes.ALOAD, 2));

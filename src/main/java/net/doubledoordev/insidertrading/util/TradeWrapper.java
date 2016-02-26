@@ -16,7 +16,7 @@ public class TradeWrapper implements IMatcher<MerchantRecipe>
 
     public MerchantRecipe unwrap(Random rand)
     {
-        return new MerchantRecipe(buying1.unwrapStack(rand), buying2 == null ? null : buying1.unwrapStack(rand), selling.unwrapStack(rand));
+        return new MerchantRecipe(buying1.unwrapStack(rand), buying2 == null ? null : buying2.unwrapStack(rand), selling.unwrapStack(rand));
     }
 
     @Override
