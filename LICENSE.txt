@@ -1,4 +1,4 @@
-Copyright (c) 2014, Dries007 & Doubledoordev
+Copyright (c) 2014 - 2017, Dries007 & Doubledoordev
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

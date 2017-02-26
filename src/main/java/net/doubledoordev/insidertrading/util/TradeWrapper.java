@@ -22,7 +22,12 @@ public class TradeWrapper implements IMatcher<MerchantRecipe>
     @Override
     public boolean matches(MerchantRecipe obj)
     {
-        return buying1.matches(obj.getItemToBuy()) && ((buying2 == null && !obj.hasSecondItemToBuy()) || buying2.matches(obj.getSecondItemToBuy())) && (selling.matches(obj.getItemToSell()));
+        return buying1.matches(obj.getItemToBuy()) &&
+                (
+                        (buying2 == null && !obj.hasSecondItemToBuy()) ||
+                        (buying2 != null && buying2.matches(obj.getSecondItemToBuy()))
+                ) &&
+                (selling.matches(obj.getItemToSell()));
     }
 
     public boolean isValid()

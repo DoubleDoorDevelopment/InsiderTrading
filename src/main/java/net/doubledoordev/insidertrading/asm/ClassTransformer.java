@@ -2,7 +2,6 @@ package net.doubledoordev.insidertrading.asm;
 
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.doubledoordev.insidertrading.util.Constants;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
